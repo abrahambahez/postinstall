@@ -23,12 +23,14 @@ wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
 echo "Instalando repositorio Flathub"
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-# Install Obsidian & Zotero
+# Install Flatpak apps
 echo "Instalando software desde Flathub"
-flatpak install -y flathub md.obsidian.Obsidian org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions
+flatpak install -y flathub it.mijorus.gearlever org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions
 
-# Set adwaita-dark theme for Zotero
-sudo flatpak override --env=GTK_THEME=Adwaita-dark org.zotero.Zotero
+# Install Appimages
+echo "Downloading old stable version of Obsidian"
+wget -O ~/Descargas/Obsidian-1.6.7.AppImage \
+https://github.com/obsidianmd/obsidian-releases/releases/download/v1.6.7/Obsidian-1.6.7.AppImage
 
 # Download Hack Nerd Font
 echo "Instalando tipografía: Hack Nerd Font"
@@ -37,7 +39,7 @@ cd ~/.local/share/fonts/Hack/
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.0/Hack.zip 
 sudo unzip ~/.local/share/fonts/Hack.zip
 ls -la ~/.local/share/fonts/
-#sudo rm ~/.local/share/fonts/Hack.zip
+sudo rm ~/.local/share/fonts/Hack.zip
 
 # Download iAWriterDuo
 echo "Instalando tipografía: iA Writer Duo"
