@@ -9,7 +9,9 @@ echo "Actualizando sistema"
 sudo dnf update
 
 echo "Instalando software inicial"
-sudo dnf install -y zsh neovim stow copr ImageMagick gnome-shell-extension-pop-shell xprop curl wget util-linux-user fzf fd-find pandoc g++ timeshift python3-pip gnome-tweaks zoxide ulauncher
+sudo dnf install -y zsh neovim stow copr ImageMagick gnome-shell-extension-pop-shell xprop curl wget util-linux-user fzf fd-find pandoc g++ timeshift python3-pip gnome-tweaks zoxide ulauncher copyq
+
+copyq eval
 
 echo "Instalando soporte para H264"
 sudo dnf config-manager --set-enabled fedora-cisco-openh264
@@ -32,29 +34,6 @@ echo "Downloading old stable version of Obsidian"
 wget -O ~/Descargas/Obsidian-1.6.7.AppImage \
 https://github.com/obsidianmd/obsidian-releases/releases/download/v1.6.7/Obsidian-1.6.7.AppImage
 
-# Download Hack Nerd Font
-echo "Instalando tipografía: Hack Nerd Font"
-mkdir ~/.local/share/fonts/Hack/
-cd ~/.local/share/fonts/Hack/
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.0/Hack.zip 
-sudo unzip ~/.local/share/fonts/Hack.zip
-ls -la ~/.local/share/fonts/
-sudo rm ~/.local/share/fonts/Hack.zip
-
-# Download iAWriterDuo
-echo "Instalando tipografía: iA Writer Duo"
-mkdir -p ~/.local/share/fonts/iAWriterDuo/
-cd ~/.local/share/fonts/iAWriterDuo/
-wget https://github.com/iaolo/iA-Fonts/raw/master/iA%20Writer%20Duo/Variable/iAWriterDuoV.ttf
-wget https://github.com/iaolo/iA-Fonts/raw/master/iA%20Writer%20Duo/Variable/iAWriterDuoV-Italic.ttf
-
-echo "Instalando tipografía: Inter"
-mkdir -p ~/.local/share/fonts/Inter/
-cd ~/.local/share/fonts/Inter/
-wget https://github.com/rsms/inter/releases/download/v3.19/Inter-3.19.zip
-sudo unzip ~/.local/share/fonts/Inter/Inter-3.19.zip
-
-cd ~
 # add zsh as a login shell
 echo "Configurando zsh como shell principal"
 command -v zsh | sudo tee -a /etc/shells
@@ -93,8 +72,40 @@ echo "Instalando Espanso desde COPR"
 sudo dnf copr enable eclipseo/espanso
 sudo dnf install espanso espanso-wayland
 
+# Install HomeBrew
+echo "Instalando Homebrew"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+
+#
+# GNOME KEYBOARD SHORTCUTS
+#
 echo "INTERCAMBIANDO teclas Alt y Ctrl izquierda"
 gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swap_lalt_lctl']"
+
+# Download Hack Nerd Font
+echo "Instalando tipografía: Hack Nerd Font"
+mkdir ~/.local/share/fonts/Hack/
+cd ~/.local/share/fonts/Hack/
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.0/Hack.zip 
+sudo unzip ~/.local/share/fonts/Hack.zip
+ls -la ~/.local/share/fonts/
+sudo rm ~/.local/share/fonts/Hack.zip
+
+# Download iAWriterDuo
+echo "Instalando tipografía: iA Writer Duo"
+mkdir -p ~/.local/share/fonts/iAWriterDuo/
+cd ~/.local/share/fonts/iAWriterDuo/
+wget https://github.com/iaolo/iA-Fonts/raw/master/iA%20Writer%20Duo/Variable/iAWriterDuoV.ttf
+wget https://github.com/iaolo/iA-Fonts/raw/master/iA%20Writer%20Duo/Variable/iAWriterDuoV-Italic.ttf
+
+echo "Instalando tipografía: Inter"
+mkdir -p ~/.local/share/fonts/Inter/
+cd ~/.local/share/fonts/Inter/
+wget https://github.com/rsms/inter/releases/download/v3.19/Inter-3.19.zip
+sudo unzip ~/.local/share/fonts/Inter/Inter-3.19.zip
+
+cd ~
 
 echo "Proceso terminado.\n\nConfigura últimos retoques vía GUI: Gnome Tweaks + Shell extensions\n\nSe cerrará la sesión..."
 
