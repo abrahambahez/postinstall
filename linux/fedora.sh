@@ -9,7 +9,7 @@ echo "Actualizando sistema"
 sudo dnf update
 
 echo "Instalando software inicial"
-sudo dnf install -y zsh neovim stow copr ImageMagick gnome-shell-extension-pop-shell xprop curl wget util-linux-user fzf fd-find pandoc g++ timeshift python3-pip gnome-tweaks zoxide ulauncher copyq
+sudo dnf install -y zsh neovim stow copr ImageMagick gnome-shell-extension-pop-shell xprop curl wget util-linux-user fzf fd-find pandoc g++ timeshift python3-pip gnome-tweaks zoxide ulauncher copyq obs-studio
 
 copyq eval
 
@@ -27,15 +27,12 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 
 # Install Flatpak apps
 echo "Instalando software desde Flathub"
-flatpak install -y flathub it.mijorus.gearlever org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions
+flatpak install -y flathub it.mijorus.gearlever org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions com.github.ahrm.sioyek
 
 # Install Appimages
 echo "Downloading old stable version of Obsidian"
 wget -O ~/Descargas/Obsidian-1.6.7.AppImage \
 https://github.com/obsidianmd/obsidian-releases/releases/download/v1.6.7/Obsidian-1.6.7.AppImage
-echo "Descargando AppImage de sioyek"
-wget -O ~/Descargas/sioyek-release-linux.zip \
-https://github.com/ahrm/sioyek/releases/download/v2.0.0/sioyek-release-linux.zip
 
 # add zsh as a login shell
 echo "Configurando zsh como shell principal"
