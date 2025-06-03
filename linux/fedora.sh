@@ -60,9 +60,12 @@ curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 nvm install npm
 echo "Instalando ConventionalCommit"
 sudo npm i -g semantic-git-commit-cli
+echo "Instalando TypeScript"
+npm install -D typescript
 
 echo "Instalando UV Python"
 curl -LsSf https://astral.sh/uv/install.sh | sh
+uv python install
 
 echo "Instalando TERMINAL Ghostty COPR"
 dnf copr enable pgdev/ghostty
