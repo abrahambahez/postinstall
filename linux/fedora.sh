@@ -27,7 +27,7 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 
 # Install Flatpak apps
 echo "Instalando software desde Flathub"
-flatpak install -y flathub it.mijorus.gearlever org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions com.github.ahrm.sioyek
+flatpak install -y flathub it.mijorus.gearlever org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions com.github.ahrm.sioyek com.github.johnfactotum.Foliate
 
 # Install Appimages
 echo "Downloading old stable version of Obsidian"
