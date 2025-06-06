@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOURCE_DIR="$HOME/Archivo/postinstall/scripts/"
+SOURCE_DIR="$HOME/Archivo/postinstall/scripts"
 TARGET_DIR="$HOME/.local/bin"
 
 # Check if ~/.local/bin is in PATH
