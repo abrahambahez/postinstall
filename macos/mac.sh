@@ -56,6 +56,9 @@ brew install --cask batfi
 echo "Installing Obsidian"
 brew install --cask obsidian
 
+echo "Installing sioyek PDF"
+brew install --cask sioyek
+
 echo "Installing Terminal Utilities and Programs..."
 brew install wget tree fzf zoxide zk neovim pandoc macfuse
 
