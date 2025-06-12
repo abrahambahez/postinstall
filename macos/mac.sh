@@ -57,7 +57,7 @@ echo "Installing Obsidian"
 brew install --cask obsidian
 
 echo "Installing sioyek PDF"
-brew install --cask sioyek
+brew install --cask sioyek --no-quarantine
 
 echo "Installing Terminal Utilities and Programs..."
 brew install wget tree fzf zoxide zk neovim pandoc macfuse
