@@ -60,7 +60,7 @@ echo "Installing sioyek PDF"
 brew install --cask sioyek --no-quarantine
 
 echo "Installing Terminal Utilities and Programs..."
-brew install wget tree fzf zoxide zk neovim pandoc macfuse
+brew install wget tree fzf zoxide zk neovim pandoc macfuse go
 
 # Install TinyTex
 echo "Install TinyTex for Pandoc"
