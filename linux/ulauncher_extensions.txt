@@ -1,9 +1,8 @@
 https://github.com/hillaryychan/ulauncher-fzf
 https://github.com/vanguard478/ulauncher-zoxide
 https://github.com/melianmiko/ulauncher-bluetoothd
-https://github.com/friday/ulauncher-gnome-settings
 https://github.com/Ulauncher/ulauncher-emoji
-https://github.com/gnikolaos/ulauncher-window-manager/
 https://github.com/friday/ulauncher-clipboard
 https://github.com/tchar/ulauncher-albert-calculate-anything
 https://github.com/the-lay/ulauncher-spotify-api
+https://github.com/damian-ds7/ulauncher-flathub-manager
