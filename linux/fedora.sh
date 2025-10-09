@@ -8,31 +8,31 @@ sudo echo "fastestmirror=True" >> /etc/dnf/dnf.conf
 echo "Actualizando sistema"
 sudo dnf update
 
-echo "Instalando software inicial"
-sudo dnf install -y zsh neovim stow copr ImageMagick gnome-shell-extension-pop-shell xprop curl wget util-linux-user fzf fd-find pandoc g++ timeshift python3-pip gnome-tweaks zoxide ulauncher copyq obs-studio golang
-
-copyq eval
+# echo "Instalando software inicial"
+# sudo dnf install -y zsh neovim stow copr ImageMagick gnome-shell-extension-pop-shell xprop curl wget util-linux-user fzf fd-find pandoc g++ timeshift python3-pip gnome-tweaks zoxide ulauncher copyq obs-studio golang
+#
+# copyq eval
 
 echo "Instalando soporte para H264"
-sudo dnf config-manager --set-enabled fedora-cisco-openh264
-sudo dnf install -y gstreamer1-plugin-openh264 mozilla-openh264
+# sudo dnf config-manager --set-enabled fedora-cisco-openh264
+# sudo dnf install -y gstreamer1-plugin-openh264 mozilla-openh264
 
 # Install TinyTex
-echo "Instalando TinyTex para conversión pandoc-pdf"
-wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
+# echo "Instalando TinyTex para conversión pandoc-pdf"
+# wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
 
 # Add Flathub repo
-echo "Instalando repositorio Flathub"
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+# echo "Instalando repositorio Flathub"
+# flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 # Install Flatpak apps
-echo "Instalando software desde Flathub"
-flatpak install -y flathub it.mijorus.gearlever org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions com.github.ahrm.sioyek com.github.johnfactotum.Foliate
-
+# echo "Instalando software desde Flathub"
+# flatpak install -y flathub it.mijorus.gearlever org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions com.github.ahrm.sioyek com.github.johnfactotum.Foliate
+#
 # Install Appimages
-echo "Downloading old stable version of Obsidian"
-wget -O ~/Descargas/Obsidian-1.6.7.AppImage \
-https://github.com/obsidianmd/obsidian-releases/releases/download/v1.6.7/Obsidian-1.6.7.AppImage
+# echo "Downloading old stable version of Obsidian"
+# wget -O ~/Descargas/Obsidian-1.6.7.AppImage \
+# https://github.com/obsidianmd/obsidian-releases/releases/download/v1.6.7/Obsidian-1.6.7.AppImage
 
 # add zsh as a login shell
 echo "Configurando zsh como shell principal"
@@ -42,26 +42,26 @@ command -v zsh | sudo tee -a /etc/shells
 sudo chsh -s $(which zsh) $USER
 chsh -s $(which zsh)
 
-# Install zsh manager
-echo "Instalando zsh manager"
-git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+# # Install zsh manager
+# echo "Instalando zsh manager"
+# git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
 
 # Install dotfiles
-echo "Configurando dotfiles"
-git clone git@github.com:abrahambahez/.dotfiles.git "$HOME/.dotfiles"
-echo "Corriendo script link..."
-cd "$HOME/.dotfiles"
-chmod +x ./link.sh
-./link.sh
-echo "Terminado"
+# echo "Configurando dotfiles"
+# git clone git@github.com:abrahambahez/.dotfiles.git "$HOME/.dotfiles"
+# echo "Corriendo script link..."
+# cd "$HOME/.dotfiles"
+# sudo chmod +x ./link.sh
+# ./link.sh
+# echo "Terminado"
 
-echo "Instalando manejadores de Javascript"
-curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-nvm install npm
-echo "Instalando ConventionalCommit"
-sudo npm i -g semantic-git-commit-cli
-echo "Instalando TypeScript"
-npm install -D typescript
+# echo "Instalando manejadores de Javascript"
+# curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+# nvm install npm
+# echo "Instalando ConventionalCommit"
+# sudo npm i -g semantic-git-commit-cli
+# echo "Instalando TypeScript"
+# npm install -D typescript
 
 echo "Instalando UV Python"
 curl -LsSf https://astral.sh/uv/install.sh | sh
