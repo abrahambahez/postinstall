@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+SOURCE_DIR=$(pwd)/scripts
 TARGET_DIR="$HOME/.local/bin"
 
 # Arrays to track results
