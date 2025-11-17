@@ -3,18 +3,29 @@
 # GNOME Dark/Light Mode & Wallpaper Toggle Script
 # Usage: ./toggle-theme.sh
 
-# Define wallpaper paths
-LIGHT_WALLPAPER="$HOME/Imágenes/bg-light.png"
-DARK_WALLPAPER="$HOME/Imágenes/bg-dark.png"
+find_wallpaper() {
+    local wallpaper_name=$1
+    local wallpaper_dir="$HOME/Imágenes"
 
-# Check if wallpaper files exist
-if [[ ! -f "$LIGHT_WALLPAPER" ]]; then
-    echo "Error: Light wallpaper not found at $LIGHT_WALLPAPER"
+    if [[ -f "$wallpaper_dir/$wallpaper_name.png" ]]; then
+        echo "$wallpaper_dir/$wallpaper_name.png"
+    elif [[ -f "$wallpaper_dir/$wallpaper_name.jpg" ]]; then
+        echo "$wallpaper_dir/$wallpaper_name.jpg"
+    else
+        echo ""
+    fi
+}
+
+LIGHT_WALLPAPER=$(find_wallpaper "bg-light")
+DARK_WALLPAPER=$(find_wallpaper "bg-dark")
+
+if [[ -z "$LIGHT_WALLPAPER" ]]; then
+    echo "Error: bg-light wallpaper not found (searched for .png and .jpg in $HOME/Imágenes)"
     exit 1
 fi
 
-if [[ ! -f "$DARK_WALLPAPER" ]]; then
-    echo "Error: Dark wallpaper not found at $DARK_WALLPAPER"
+if [[ -z "$DARK_WALLPAPER" ]]; then
+    echo "Error: bg-dark wallpaper not found (searched for .png and .jpg in $HOME/Imágenes)"
     exit 1
 fi
 
