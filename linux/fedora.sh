@@ -1,116 +1,97 @@
 #!/usr/bin/env bash
-set -e
 
-# Make dnf faster appending two lines to the end of the config file
-sudo echo "max_parallel_downloads=10" >> /etc/dnf/dnf.conf
-sudo echo "fastestmirror=True" >> /etc/dnf/dnf.conf
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LIB_DIR="$SCRIPT_DIR/lib"
+DATA_DIR="$SCRIPT_DIR/data"
+CONFIG_DIR="$SCRIPT_DIR/config"
 
-echo "Actualizando sistema"
-sudo dnf update
+source "$LIB_DIR/core.sh"
+source "$LIB_DIR/dnf.sh"
+source "$LIB_DIR/copr.sh"
+source "$LIB_DIR/flatpak.sh"
+source "$LIB_DIR/fonts.sh"
+source "$LIB_DIR/git-extensions.sh"
+source "$LIB_DIR/gnome-keyboard.sh"
+source "$LIB_DIR/extras.sh"
 
-# echo "Instalando software inicial"
-# sudo dnf install -y zsh neovim stow copr ImageMagick gnome-shell-extension-pop-shell xprop curl wget util-linux-user fzf fd-find pandoc g++ timeshift python3-pip gnome-tweaks zoxide ulauncher copyq obs-studio golang
-#
-# copyq eval
+if [[ -f "$CONFIG_DIR/settings.env" ]]; then
+    source "$CONFIG_DIR/settings.env"
+fi
 
-echo "Instalando soporte para H264"
-# sudo dnf config-manager --set-enabled fedora-cisco-openh264
-# sudo dnf install -y gstreamer1-plugin-openh264 mozilla-openh264
+ULAUNCHER_EXTENSIONS_DIR="${ULAUNCHER_EXTENSIONS_DIR:-$HOME/.local/share/ulauncher/extensions}"
+SKIP_SYSTEM_UPDATE="${SKIP_SYSTEM_UPDATE:-false}"
+SKIP_ZSH_SETUP="${SKIP_ZSH_SETUP:-false}"
+SKIP_UV_PYTHON="${SKIP_UV_PYTHON:-false}"
+SKIP_HOMEBREW="${SKIP_HOMEBREW:-false}"
+SKIP_GNOME_CONFIG="${SKIP_GNOME_CONFIG:-false}"
+AUTO_LOGOUT="${AUTO_LOGOUT:-true}"
 
-# Install TinyTex
-# echo "Instalando TinyTex para conversión pandoc-pdf"
-# wget -qO- "https://yihui.org/tinytex/install-bin-unix.sh" | sh
+log_info "=== Fedora Post-Install Script Started ==="
+log_info "Log file: $LOGFILE"
+log_info "Script directory: $SCRIPT_DIR"
 
-# Add Flathub repo
-# echo "Instalando repositorio Flathub"
-# flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+if ! pre_flight_checks; then
+    log_error "Pre-flight checks failed. Exiting."
+    exit 1
+fi
 
-# Install Flatpak apps
-# echo "Instalando software desde Flathub"
-# flatpak install -y flathub it.mijorus.gearlever org.zotero.Zotero com.spotify.Client app.zen_browser.zen org.gnome.Extensions com.github.ahrm.sioyek com.github.johnfactotum.Foliate
-#
-# Install Appimages
-# echo "Downloading old stable version of Obsidian"
-# wget -O ~/Descargas/Obsidian-1.6.7.AppImage \
-# https://github.com/obsidianmd/obsidian-releases/releases/download/v1.6.7/Obsidian-1.6.7.AppImage
+setup_dnf_config
 
-# add zsh as a login shell
-echo "Configurando zsh como shell principal"
-command -v zsh | sudo tee -a /etc/shells
+if [[ "$SKIP_SYSTEM_UPDATE" != "true" ]]; then
+    update_system
+else
+    log_info "Skipping system update (SKIP_SYSTEM_UPDATE=true)"
+fi
 
-# use zsh as default shell
-sudo chsh -s $(which zsh) $USER
-chsh -s $(which zsh)
+if [[ -f "$DATA_DIR/dnf-packages.txt" ]]; then
+    install_dnf_packages "$DATA_DIR/dnf-packages.txt"
+fi
 
-# # Install zsh manager
-# echo "Instalando zsh manager"
-# git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+if [[ -f "$DATA_DIR/copr-packages.txt" ]]; then
+    install_copr_packages "$DATA_DIR/copr-packages.txt"
+fi
 
-# Install dotfiles
-# echo "Configurando dotfiles"
-# git clone git@github.com:abrahambahez/.dotfiles.git "$HOME/.dotfiles"
-# echo "Corriendo script link..."
-# cd "$HOME/.dotfiles"
-# sudo chmod +x ./link.sh
-# ./link.sh
-# echo "Terminado"
+if [[ -f "$DATA_DIR/flatpak-apps.txt" ]]; then
+    setup_flathub
+    install_flatpak_apps "$DATA_DIR/flatpak-apps.txt"
+fi
 
-# echo "Instalando manejadores de Javascript"
-# curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-# nvm install npm
-# echo "Instalando ConventionalCommit"
-# sudo npm i -g semantic-git-commit-cli
-# echo "Instalando TypeScript"
-# npm install -D typescript
+if [[ "$SKIP_ZSH_SETUP" != "true" ]]; then
+    setup_zsh
+else
+    log_info "Skipping zsh setup (SKIP_ZSH_SETUP=true)"
+fi
 
-echo "Instalando UV Python"
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv python install
+if [[ "$SKIP_UV_PYTHON" != "true" ]]; then
+    install_uv_python
+else
+    log_info "Skipping UV Python (SKIP_UV_PYTHON=true)"
+fi
 
-echo "Instalando TERMINAL Ghostty COPR"
-dnf copr enable pgdev/ghostty
-dnf install ghostty
+if [[ "$SKIP_HOMEBREW" != "true" ]]; then
+    install_homebrew
+else
+    log_info "Skipping Homebrew (SKIP_HOMEBREW=true)"
+fi
 
-echo "Instalando Espanso desde COPR"
-sudo dnf copr enable eclipseo/espanso
-sudo dnf install espanso espanso-wayland
+if [[ "$SKIP_GNOME_CONFIG" != "true" ]]; then
+    configure_gnome_keyboard
+else
+    log_info "Skipping GNOME keyboard configuration (SKIP_GNOME_CONFIG=true)"
+fi
 
-# Install HomeBrew
-echo "Instalando Homebrew"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+if [[ -f "$DATA_DIR/fonts.txt" ]]; then
+    install_fonts "$DATA_DIR/fonts.txt"
+fi
 
+if [[ -f "$DATA_DIR/ulauncher-extensions.txt" ]]; then
+    install_git_extensions "$DATA_DIR/ulauncher-extensions.txt" "$ULAUNCHER_EXTENSIONS_DIR"
+fi
 
-#
-# GNOME KEYBOARD SHORTCUTS
-#
-echo "INTERCAMBIANDO teclas Alt y Ctrl izquierda"
-gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swap_lalt_lctl']"
+print_summary
 
-# Download Hack Nerd Font
-echo "Instalando tipografía: Hack Nerd Font"
-mkdir ~/.local/share/fonts/Hack/
-cd ~/.local/share/fonts/Hack/
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.0/Hack.zip 
-sudo unzip ~/.local/share/fonts/Hack.zip
-ls -la ~/.local/share/fonts/
-sudo rm ~/.local/share/fonts/Hack.zip
-
-# Download iAWriterDuo
-echo "Instalando tipografía: iA Writer Duo"
-mkdir -p ~/.local/share/fonts/iAWriterDuo/
-cd ~/.local/share/fonts/iAWriterDuo/
-wget https://github.com/iaolo/iA-Fonts/raw/master/iA%20Writer%20Duo/Variable/iAWriterDuoV.ttf
-wget https://github.com/iaolo/iA-Fonts/raw/master/iA%20Writer%20Duo/Variable/iAWriterDuoV-Italic.ttf
-
-echo "Instalando tipografía: Inter"
-mkdir -p ~/.local/share/fonts/Inter/
-cd ~/.local/share/fonts/Inter/
-wget https://github.com/rsms/inter/releases/download/v3.19/Inter-3.19.zip
-sudo unzip ~/.local/share/fonts/Inter/Inter-3.19.zip
-
-cd ~
-
-echo "Proceso terminado.\n\nConfigura últimos retoques vía GUI: Gnome Tweaks + Shell extensions\n\nSe cerrará la sesión..."
-
-gnome-session-quit --logout
-
+if [[ "$AUTO_LOGOUT" == "true" ]]; then
+    logout_session
+else
+    log_info "Auto-logout disabled (AUTO_LOGOUT=false)"
+fi
