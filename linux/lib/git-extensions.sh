@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
+get_ulauncher_extension_name() {
+    local url="$1"
+
+    local user repo
+    user=$(echo "$url" | sed -n 's|.*/github.com/\([^/]*\)/.*|\1|p')
+    repo=$(basename "$url" .git)
+
+    if [[ -z "$user" ]] || [[ -z "$repo" ]]; then
+        echo "$repo"
+        return 1
+    fi
+
+    echo "com.github.${user}.${repo}"
+    return 0
+}
+
 install_git_extensions() {
     local extensions_file="$1"
     local target_dir="$2"
@@ -35,15 +51,15 @@ install_git_extensions() {
         return 0
     fi
 
-    local url repo_name
+    local url extension_name
     while IFS= read -r url; do
-        repo_name=$(basename "$url" .git)
+        extension_name=$(get_ulauncher_extension_name "$url")
 
-        if [[ -d "$target_dir/$repo_name" ]]; then
-            log_info "Extension already cloned: $repo_name"
+        if [[ -d "$target_dir/$extension_name" ]]; then
+            log_info "Extension already installed: $extension_name"
         else
-            run_command "Clone git extension: $repo_name" \
-                git clone "$url" "$target_dir/$repo_name"
+            run_command "Clone extension: $extension_name" \
+                git clone "$url" "$target_dir/$extension_name"
         fi
     done <<< "$urls"
 }

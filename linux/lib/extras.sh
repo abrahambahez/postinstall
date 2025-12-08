@@ -11,6 +11,14 @@ setup_zsh() {
     local zsh_path
     zsh_path=$(command -v zsh)
 
+    local current_shell
+    current_shell=$(getent passwd "$USER" | cut -d: -f7)
+
+    if [[ "$current_shell" == "$zsh_path" ]]; then
+        log_info "zsh already set as default shell for $USER"
+        return 0
+    fi
+
     if ! grep -q "$zsh_path" /etc/shells 2>/dev/null; then
         if echo "$zsh_path" | sudo tee -a /etc/shells >> "$LOGFILE" 2>&1; then
             log_success "Added zsh to /etc/shells"
