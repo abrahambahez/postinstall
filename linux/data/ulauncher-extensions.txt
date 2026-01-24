@@ -5,8 +5,5 @@ https://github.com/Ulauncher/ulauncher-emoji
 https://github.com/friday/ulauncher-clipboard
 https://github.com/tchar/ulauncher-albert-calculate-anything
 https://github.com/damian-ds7/ulauncher-flathub-manager
-
-No usados por ahora:
-
-
-https://github.com/the-lay/ulauncher-spotify-api
+# No usados por ahora
+# https://github.com/the-lay/ulauncher-spotify-api
